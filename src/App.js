@@ -25,8 +25,6 @@ class App extends Component {
       currentPage: 1,
       loadingState: loadingStatus.loading
     };
-    this.fetchPhotos = this.fetchPhotos.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -54,9 +52,12 @@ class App extends Component {
   };
 
   handleSubmit = async query => {
-    if (!(!!query && query)) {
+    if (!(!!query && query)) { // Mindfuck!
       return this.fetchPhotos(1)
     }
+
+    // my recommendation is to set page number in the query string so that it can be linked
+    // react-router would have helped a lot
 
     const page = this.state.currentPage;
     const {perPage} = this.state;
@@ -64,6 +65,7 @@ class App extends Component {
     this.setState({loadingState: loadingStatus.loading});
     try {
       const response = await fetch(url);
+      // we need to check for bad http status codes here: if (response.ok) { ... }
       const photos = await response.json();
 
       const totalPhotos = parseInt(response.headers.get("x-total"));
@@ -94,7 +96,7 @@ class App extends Component {
           total={this.state.totalPhotos}
           perPage={this.state.perPage}
           pageRange={1}
-          onPageChanged={this.fetchPhotos.bind(this)}
+          onPageChanged={this.fetchPhotos}
         />
         <footer>
           <p>Developed with ☕️ by <strong>Matias Garat Ortiz</strong></p>

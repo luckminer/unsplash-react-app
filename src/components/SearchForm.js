@@ -1,11 +1,6 @@
 import React, {Component} from "react";
 
 class SearchForm extends Component {
-  constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
   handleSubmit = e => {
     e.preventDefault();
     const value = this.input.value
